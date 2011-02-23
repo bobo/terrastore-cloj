@@ -5,8 +5,20 @@
 
 (def *server* "http://localhost:8000/")
 
+
+(defn print-me [a]
+  (if (list? a)
+    (str "(" (print-me (second a)) " " (first  a) " " (print-me (last a)) ")" )
+    a))
+
 (defmacro clj-to-js [more]
-  (.replaceAll (str (second more) (first  more) (last more)) "=" "=="))
+  (if (list? more)
+    (.replaceAll (str (print-me (second more)) " "
+                      (first  more) " "
+                      (print-me (last more)))
+                 "=" "==")
+    (str more)))
+
 
 
 (def type-json {"Content-Type" "applucation/json"})
