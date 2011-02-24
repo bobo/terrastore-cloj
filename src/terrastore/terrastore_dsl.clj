@@ -1,5 +1,4 @@
 (ns terrastore.terrastore-dsl
-  (:use terrastore.terrastore-cloj )
   (:use terrastore.terrastore-ops)
   (:require [clojure.contrib.json :as json])
   (import [java.net URLEncoder]))
@@ -7,16 +6,16 @@
 (def *server* "http://localhost:8000/")
 
 
-(defn print-me [a]
+(defn convert-element [a]
   (if (list? a)
-    (str "(" (print-me (second a)) " " (first  a) " " (print-me (last a)) ")" )
+    (str "(" (convert-element (second a)) " " (first  a) " " (convert-element (last a)) ")" )
     a))
 
 (defmacro clj-to-js [more]
   (if (list? more)
-    (.replaceAll (str (print-me (second more)) " "
+    (.replaceAll (str (convert-element (second more)) " "
                       (first  more) " "
-                      (print-me (last more)))
+                      (convert-element (last more)))
                  "=" "==")
     (str more)))
 
